@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+
 void main() {
   runApp(ChicCycle());
 }
@@ -21,7 +22,8 @@ class ChicCycle extends StatelessWidget {
             borderRadius: BorderRadius.circular(12.0),
             borderSide: BorderSide.none,
           ),
-          contentPadding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0),
+          contentPadding:
+          EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0),
           labelStyle: TextStyle(color: Color(0xFF4FC3F7)),
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
@@ -41,10 +43,10 @@ class ChicCycle extends StatelessWidget {
           centerTitle: true,
           backgroundColor: Color(0xFF81C784), // Pastel yeşil AppBar
           leading: IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: (){
-                Navigator.pop(context);
-              },
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
         ),
         body: Center(
@@ -65,7 +67,8 @@ class CommonTextFieldDemo extends StatefulWidget {
 
 class _CommonTextFieldDemoState extends State<CommonTextFieldDemo> {
   File? _selectedImage;
-
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _ideaController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -76,20 +79,20 @@ class _CommonTextFieldDemoState extends State<CommonTextFieldDemo> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(
-              width: 1000, // TextField'ların genişliği sınırlanıyor
+              width: 1000,
               child: TextFormField(
+                controller: _nameController,
                 decoration: InputDecoration(
                   labelText: 'İsim',
                   prefixIcon: Icon(Icons.person, color: Color(0xFF4FC3F7)),
                 ),
               ),
             ),
-
-
             SizedBox(height: 10),
             SizedBox(
               width: 1000,
               child: TextFormField(
+                controller: _ideaController,
                 maxLines: 4,
                 decoration: InputDecoration(
                   labelText: 'Dönüşüm Fikri',
@@ -97,35 +100,47 @@ class _CommonTextFieldDemoState extends State<CommonTextFieldDemo> {
                 ),
               ),
             ),
-            SizedBox(height: 30,),
+            SizedBox(height: 30),
             ElevatedButton(
               onPressed: () {
                 _pickImageFromGallery();
               },
               child: Text("Fotoğraf Ekle"),
             ),
-            _selectedImage != null ? Image.file(_selectedImage!) : const Text("Lütfen bir fotoğraf seçiniz."),
+            _selectedImage != null
+                ? Image.file(_selectedImage!)
+                : const Text("Lütfen bir fotoğraf seçiniz."),
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                setState(() {
-
-                });
+                _clearForm();
               },
               child: Text("Gönder"),
             ),
-            const SizedBox(height: 20,),
+            const SizedBox(
+              height: 20,
+            ),
           ],
         ),
       ),
     );
   }
-  Future<void> _pickImageFromGallery()async {
-   final returnedImage =  await ImagePicker().pickImage(source: ImageSource.gallery);
 
-   if(returnedImage == null) return;
-   setState(() {
-     _selectedImage = File(returnedImage!.path);
-   });
+  Future<void> _pickImageFromGallery() async {
+    final returnedImage =
+    await ImagePicker().pickImage(source: ImageSource.gallery);
+
+    if (returnedImage == null) return;
+    setState(() {
+      _selectedImage = File(returnedImage.path);
+    });
+  }
+
+  void _clearForm() {
+    setState(() {
+      _nameController.clear();
+      _ideaController.clear();
+      _selectedImage = null;
+    });
   }
 }
